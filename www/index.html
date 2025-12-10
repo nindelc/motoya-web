@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTO-YA</title>
+    
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FUENTES DE GOOGLE -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- ICONOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CONFIGURACIÓN DE ESTILOS Y FONDO -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#0f172a',
+                        'brand-gold': '#fbbf24',
+                        'brand-blue': '#3b82f6',
+                        'brand-accent': '#f59e0b',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Montserrat', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 1)), url('fondo_portada.jpg')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-text { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        .gold-gradient { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        
+        /* Ajustes para scrollbar */
+        .modal-scroll::-webkit-scrollbar { width: 8px; }
+        .modal-scroll::-webkit-scrollbar-track { background: #1e293b; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        /* Honeypot: Campo trampa invisible para bots */
+        .hp-field { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; }
+    </style>
+</head>
+<body class="bg-brand-dark text-white font-sans antialiased">
+
+    <!-- NAV BAR -->
+    <nav class="fixed w-full z-50 bg-brand-dark/90 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <span class="text-2xl font-display font-black text-white">
+                        MOTO<span class="text-brand-blue">YA</span>
+                        <i class="fas fa-bolt text-brand-gold ml-1"></i>
+                    </span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#inicio" class="hover:text-brand-blue transition px-3 py-2 rounded-md text-sm font-medium">Inicio</a>
+                        <a href="#como-funciona" class="hover:text-brand-blue transition px-3 py-2 rounded-md text-sm font-medium">Cómo funciona</a>
+                        <a href="#faq" class="hover:text-brand-blue transition px-3 py-2 rounded-md text-sm font-medium">Preguntas</a>
+                        <a href="#chequeo" class="hover:text-brand-blue transition px-3 py-2 rounded-md text-sm font-medium border border-brand-blue/30 bg-brand-blue/10">Chequear Números</a>
+                        <a href="#tickets" class="bg-brand-blue hover:bg-blue-600 text-white px-5 py-2 rounded-full font-bold transition transform hover:scale-105 shadow-lg shadow-blue-500/30">
+                            PARTICIPAR
+                        </a>
+                    </div>
+                </div>
+                <!-- Botón Menú Móvil -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-gray-400 hover:text-white p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Menú Móvil Desplegable -->
+        <div class="hidden md:hidden bg-brand-dark border-b border-gray-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#inicio" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Inicio</a>
+                <a href="#como-funciona" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Cómo Funciona</a>
+                <a href="#faq" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Preguntas Frecuentes</a>
+                <a href="#chequeo" class="text-brand-blue hover:text-white block px-3 py-2 rounded-md text-base font-medium font-bold">Comprobar Números</a>
+                <a href="#tickets" class="text-white block px-3 py-2 rounded-md text-base font-bold bg-brand-blue text-center mt-4">COMPRAR REVISTA</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (PORTADA) -->
+    <div id="inicio" class="relative bg-hero-pattern bg-cover bg-center min-h-screen flex items-center justify-center py-32">
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+            <div class="inline-block px-4 py-1 rounded-full border border-brand-gold/50 bg-brand-gold/10 text-brand-gold font-bold text-sm mb-6 animate-pulse">
+                🔥 PRÓXIMO SORTEO: 10 DE ENERO
+            </div>
+            <h1 class="text-5xl md:text-7xl font-display font-black tracking-tight mb-6 leading-tight">
+                TU LIBERTAD CUESTA<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-brand-blue neon-text">MENOS QUE UN HELADO</span>
+            </h1>
+            
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-300 mb-10">
+                Adquirí nuestra eRevista con todas las novedades de motos en Argentina y recibí chances bonificadas para ganar una <span class="text-white font-bold">MOTO 0KM PATENTADA</span>.
+            </p>
+
+            <!-- CONTADOR -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <div class="glass-card p-4 rounded-xl w-24 text-center"><span id="days" class="block text-3xl font-bold text-white">00</span><span class="text-xs text-gray-400 uppercase">Días</span></div>
+                <div class="glass-card p-4 rounded-xl w-24 text-center"><span id="hours" class="block text-3xl font-bold text-white">00</span><span class="text-xs text-gray-400 uppercase">Hs</span></div>
+                <div class="glass-card p-4 rounded-xl w-24 text-center"><span id="minutes" class="block text-3xl font-bold text-white">00</span><span class="text-xs text-gray-400 uppercase">Min</span></div>
+                <div class="glass-card p-4 rounded-xl w-24 text-center"><span id="seconds" class="block text-3xl font-bold text-brand-gold">00</span><span class="text-xs text-gray-400 uppercase">Seg</span></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#tickets" class="gold-gradient text-white font-bold py-4 px-10 rounded-full text-lg shadow-lg shadow-yellow-500/20 hover:shadow-yellow-500/40 transition transform hover:-translate-y-1">QUIERO MI MOTO 0KM</a>
+                <a href="#chequeo" class="glass-card text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-white/10 transition">Comprobar Números</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCION COMPARATIVA (HELADO VS MOTO) -->
+    <section class="py-24 bg-brand-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">LA ELECCIÓN INTELIGENTE</h2>
+                <div class="w-24 h-1 bg-brand-blue mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Lado A: El Gasto -->
+                <div class="glass-card p-8 rounded-2xl border-red-500/30 text-center relative group hover:border-red-500/60 transition z-10 mt-6 md:mt-0">
+                    <div class="absolute -top-6 left-0 right-0 mx-auto w-fit whitespace-nowrap bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-red-500/30">EL GASTO</div>
+                    
+                    <!-- IMAGEN HELADO LOCAL -->
+                    <img src="icono_helado.png" alt="Helado" class="w-32 h-32 object-contain mx-auto mb-4 drop-shadow-2xl grayscale group-hover:grayscale-0 transition duration-500 hover:scale-110">
+                    
+                    <h3 class="text-2xl font-bold text-white mb-2">Un Simple Helado</h3>
+                    <p class="text-gray-400 mb-6">Te dura unos minutos y se derrite si no lo comes.</p>
+                    <div class="text-3xl font-black text-red-400">$3.000</div>
+                </div>
+
+                <!-- Lado B: La Inversión -->
+                <div class="glass-card p-8 rounded-2xl border-brand-gold/30 text-center relative bg-gradient-to-b from-brand-dark to-brand-blue/10 transform md:scale-105 border-2 border-brand-blue shadow-2xl shadow-blue-500/20 z-20 mt-6 md:mt-0">
+                    <div class="absolute -top-6 left-0 right-0 mx-auto w-fit whitespace-nowrap bg-brand-blue text-white px-4 py-1 rounded-full text-sm font-bold animate-bounce shadow-lg shadow-blue-500/30">LA OPORTUNIDAD</div>
+                    
+                    <!-- IMAGEN MOTO LOCAL -->
+                    <img src="icono_moto.png" alt="Moto 3D" class="w-40 h-40 object-contain mx-auto mb-4 drop-shadow-2xl transition duration-500 hover:scale-110">
+                    
+                    <h3 class="text-2xl font-bold text-white mb-2">Tu Propia Moto</h3>
+                    <p class="text-gray-400 mb-6">Cambia tu forma de moverte y dura para siempre.</p>
+                    <div class="text-3xl font-black text-brand-gold">$3.000</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA / TRANSPARENCIA -->
+    <section id="como-funciona" class="py-20 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand-blue font-bold tracking-widest uppercase text-sm">Transparencia Total</span>
+                <h2 class="text-3xl md:text-5xl font-display font-black text-white mt-2 mb-6">¿CÓMO PARTICIPO?</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Se sortea por Lotería Nacional. Sin letras chicas, sin bolilleros caseros.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Paso 1 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 text-center hover:-translate-y-2 transition duration-300">
+                    <div class="w-16 h-16 bg-brand-blue/20 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-brand-blue">1</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Adquirí tu eRevista</h3>
+                    <p class="text-gray-400">Participas comprando cualquiera de nuestros packs de la eRevista a través de Mercado Pago. Es seguro y al instante.</p>
+                </div>
+
+                <!-- Paso 2 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 text-center hover:-translate-y-2 transition duration-300">
+                    <div class="w-16 h-16 bg-brand-gold/20 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-brand-gold">2</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Recibí tus Números</h3>
+                    <p class="text-gray-400">El sistema te asignará automáticamente tus chances gratuitas y te llegarán a tu WhatsApp y email junto con tu producto digital.</p>
+                </div>
+
+                <!-- Paso 3 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 text-center hover:-translate-y-2 transition duration-300">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-green-500">3</div>
+                    <h3 class="text-xl font-bold text-white mb-4">Sorteo Oficial</h3>
+                    <p class="text-gray-400">El ganador se define con los 4 números del primer premio de la <strong>Lotería Nacional (Nocturna)</strong> del segundo sábado del mes posterior a la venta de la eRevista, o el sorteo más próximo realizado si este no se realizara.</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 p-6 bg-brand-blue/10 rounded-xl border border-brand-blue/30 text-center">
+                <p class="text-sm md:text-base text-gray-300">
+                    <i class="fas fa-info-circle text-brand-blue mr-2"></i>
+                    <strong>Nota Importante:</strong> Si el número ganador no fue vendido, se utiliza el segundo premio de la lotería, y así consecutivamente hasta obtener un ganador. Si el premio quedara vacante, se utilizará el sorteo inmediatamente más próximo de Lotería Nacional Nocturna para obtener un ganador. <button onclick="toggleModal('modal-bases')" class="text-brand-blue hover:text-brand-gold underline font-bold cursor-pointer transition-colors">(Ver Bases)</button>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TICKETS / PRECIOS -->
+    <section id="tickets" class="py-20 relative">
+        <!-- Decoration background -->
+        <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-brand-dark to-brand-dark -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-brand-blue font-bold tracking-widest uppercase text-sm">Empieza Ahora</span>
+                <h2 class="text-3xl md:text-5xl font-display font-black text-white mt-2 mb-6">ELEGÍ TU ACCESO</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Seleccioná el pack de eRevista que prefieras. Todos incluyen chances de regalo.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 pt-6">
+                <!-- CARD 1 -->
+                <div class="glass-card rounded-3xl p-8 hover:bg-white/5 transition duration-300 flex flex-col">
+                    <h3 class="text-xl font-bold text-gray-300">PACK BASE</h3>
+                    <div class="my-6">
+                        <span class="text-4xl font-bold text-white">$3.000</span>
+                        <span class="text-gray-500">/único</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-1">
+                        <li class="flex items-center text-gray-300"><i class="fas fa-check text-green-500 mr-3"></i> eRevista MOTOYA</li>
+                        <li class="flex items-center text-white font-bold"><i class="fas fa-ticket-alt text-brand-gold mr-3"></i> 1 Chance</li>
+                    </ul>
+                    <button onclick="abrirModalCompra('pack1', 1, 3000, 'Pack Base (1 Chance)')" class="w-full py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white hover:text-brand-dark transition">COMPRAR</button>
+                </div>
+
+                <!-- CARD 2 (DESTACADO) -->
+                <div class="relative rounded-3xl p-1 bg-gradient-to-b from-brand-gold to-brand-accent shadow-2xl shadow-orange-500/20 transform md:-translate-y-4">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-brand-gold text-brand-dark font-black px-4 py-1 rounded-full text-xs tracking-wider shadow-lg">MÁS VENDIDO</div>
+                    <div class="bg-brand-dark rounded-[20px] p-8 h-full flex flex-col relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-brand-gold/10 rounded-bl-full"></div>
+                        
+                        <h3 class="text-2xl font-bold text-brand-gold">PACK AMIGO</h3>
+                        <div class="my-6">
+                            <span class="text-5xl font-bold text-white">$6.000</span>
+                            <span class="text-gray-500">/único</span>
+                        </div>
+                        <div class="bg-brand-blue/10 text-brand-blue text-sm font-bold px-3 py-1 rounded-lg inline-block w-max mb-6">
+                            AHORRÁS $3.000
+                        </div>
+                        <ul class="space-y-4 mb-8 flex-1">
+                            <li class="flex items-center text-gray-300"><i class="fas fa-check text-green-500 mr-3"></i> eRevista MOTOYA</li>
+                            <li class="flex items-center text-white font-bold"><i class="fas fa-ticket-alt text-brand-gold mr-3"></i> 3 Chances</li>
+                            <li class="flex items-center text-gray-300"><i class="fas fa-star text-brand-gold mr-3"></i> Comunidad Amigos MOTOYA</li>
+                        </ul>
+                        <button onclick="abrirModalCompra('pack2', 3, 6000, 'Pack Amigo (3 Chances)')" class="w-full py-4 rounded-xl gold-gradient text-white font-bold shadow-lg hover:shadow-orange-500/50 transition transform hover:scale-105">QUIERO ESTE</button>
+                    </div>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="glass-card rounded-3xl p-8 hover:bg-white/5 transition duration-300 flex flex-col">
+                    <h3 class="text-xl font-bold text-gray-300">PACK PRO</h3>
+                    <div class="my-6">
+                        <span class="text-4xl font-bold text-white">$18.000</span>
+                        <span class="text-gray-500">/único</span>
+                    </div>
+                    <div class="bg-brand-blue/10 text-brand-blue text-sm font-bold px-3 py-1 rounded-lg inline-block w-max mb-6">
+                            AHORRÁS $12.000
+                    </div>
+                    <ul class="space-y-4 mb-8 flex-1">
+                        <li class="flex items-center text-gray-300"><i class="fas fa-check text-green-500 mr-3"></i> eRevista MOTOYA</li>
+                        <li class="flex items-center text-white font-bold"><i class="fas fa-ticket-alt text-brand-gold mr-3"></i> 10 Chances</li>
+                        <li class="flex items-center text-gray-300"><i class="fas fa-crown text-brand-gold mr-3"></i> Comunidad VIP MOTOYA</li>
+                    </ul>
+                    <button onclick="abrirModalCompra('pack3', 10, 18000, 'Pack Pro (10 Chances)')" class="w-full py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white hover:text-brand-dark transition">COMPRAR</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCION BUSCADOR DE CHANCES -->
+    <section id="chequeo" class="py-20 bg-brand-dark border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+             <div class="inline-block px-4 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/30 text-brand-blue font-bold text-xs tracking-widest mb-4">ÁREA DE CLIENTES</div>
+             <h2 class="text-3xl font-display font-bold text-white mb-8">¿YA COMPRASTE? COMPROBÁ TUS NÚMEROS</h2>
+             
+             <div class="glass-card p-8 rounded-2xl max-w-lg mx-auto shadow-2xl shadow-blue-900/10">
+                 <label class="block text-left text-gray-400 text-sm font-bold mb-2 ml-1">Documento Nacional de Identidad</label>
+                 <div class="relative">
+                     <span class="absolute left-4 top-3.5 text-gray-500"><i class="fas fa-id-card"></i></span>
+                     <input type="number" id="dniInput" placeholder="Ingresá tu DNI sin puntos" class="w-full bg-brand-dark/50 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white mb-6 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition">
+                 </div>
+                 
+                 <button onclick="buscarChances()" class="w-full bg-white text-brand-dark font-black py-4 rounded-xl hover:bg-gray-200 transition transform hover:scale-[1.02] shadow-lg">
+                     <i class="fas fa-search mr-2"></i> BUSCAR MIS CHANCES
+                 </button>
+
+                 <!-- Resultados -->
+                 <div id="resultadoChances" class="mt-8 hidden transition-all duration-500">
+                     <!-- El contenido se inyecta vía JS -->
+                 </div>
+             </div>
+        </div>
+    </section>
+
+    <!-- PREGUNTAS FRECUENTES (FAQ) -->
+    <section id="faq" class="py-20 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-display font-bold text-white mb-4">PREGUNTAS FRECUENTES</h2>
+                <div class="w-24 h-1 bg-brand-blue mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- FAQ Item 1 -->
+                <div class="bg-brand-dark p-6 rounded-xl border border-white/5 hover:border-brand-blue/30 transition">
+                    <h4 class="text-lg font-bold text-white mb-2 flex items-center"><i class="fas fa-question-circle text-brand-blue mr-3"></i> ¿Es legal este sorteo?</h4>
+                    <p class="text-gray-400 text-sm">Absolutamente. Operamos como una promoción comercial accesoria a la venta de productos digitales, en cumplimiento con las normas de Lealtad Comercial de la República Argentina.</p>
+                </div>
+                <!-- FAQ Item 2 -->
+                <div class="bg-brand-dark p-6 rounded-xl border border-white/5 hover:border-brand-blue/30 transition">
+                    <h4 class="text-lg font-bold text-white mb-2 flex items-center"><i class="fas fa-trophy text-brand-gold mr-3"></i> ¿Cómo sé si gané?</h4>
+                    <p class="text-gray-400 text-sm">Los ganadores se determinan por el sorteo Nocturno de la Lotería Nacional del segundo sábado del mes posterior a la venta de la revista. Publicamos los resultados en esta página y nuestras redes, pero además te contactaremos por WhatsApp/Email inmediatamente.</p>
+                </div>
+                <!-- FAQ Item 3 -->
+                <div class="bg-brand-dark p-6 rounded-xl border border-white/5 hover:border-brand-blue/30 transition">
+                    <h4 class="text-lg font-bold text-white mb-2 flex items-center"><i class="fas fa-truck text-green-500 mr-3"></i> ¿Hacen envíos al interior?</h4>
+                    <p class="text-gray-400 text-sm">Sí, enviamos la unidad cualquier provincia de Argentina. Los gastos y modalidad de flete corren por cuenta del ganador, pero los gastos de patentamiento, administrativos o cualquier otro relacionado a la compra del vehículo están bonificados.</p>
+                </div>
+                <!-- FAQ Item 4 -->
+                <div class="bg-brand-dark p-6 rounded-xl border border-white/5 hover:border-brand-blue/30 transition">
+                    <h4 class="text-lg font-bold text-white mb-2 flex items-center"><i class="fas fa-times-circle text-red-400 mr-3"></i> ¿Qué pasa si no sale el número?</h4>
+                    <p class="text-gray-400 text-sm">Si el primer premio queda vacante (número no vendido), el premio pasa automáticamente a quien tenga el número coincidente con el Segundo Premio de la Lotería consecutivamente hasta descartar los 20 premios sorteados ese día, si nadie resultara ganador, se realizará un nuevo sorteo usando los números del sorteo más próximo a realizarse por Lotería Nacional Nocturna, asegurando que SIEMPRE SE ENTREGA EL PREMIO.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOGOS TRUST (MOVIDO AQUÍ) -->
+    <div class="bg-black py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition duration-500">
+            <div class="flex items-center gap-2"><i class="fas fa-shield-alt text-2xl"></i> <span class="font-bold text-xl">MERCADO PAGO</span></div>
+            <div class="flex items-center gap-2"><i class="fas fa-landmark text-2xl"></i> <span class="font-bold text-xl">LOTERÍA NACIONAL</span></div>
+            <div class="flex items-center gap-2"><i class="fas fa-file-contract text-2xl"></i> <span class="font-bold text-xl">BASE LEGAL</span></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-black text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-4 gap-8">
+            <div class="col-span-2">
+                <span class="text-2xl font-display font-black text-white">MOTO<span class="text-brand-blue">YA</span></span>
+                <p class="mt-4 text-sm max-w-xs">
+                    Somos una empresa dedicada a la comercialización de productos digitales sobre actualidad y noticias sobre motos. Los sorteos son una promoción gratuita accesoria a la venta.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Legal</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><button onclick="toggleModal('modal-bases')" class="hover:text-white text-left">Bases y Condiciones</button></li>
+                    <li><button onclick="toggleModal('modal-privacidad')" class="hover:text-white text-left">Política de Privacidad</button></li>
+                    <li><a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario" target="_blank" class="hover:text-white">Defensa al Consumidor</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">Contacto</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><i class="fab fa-whatsapp mr-2"></i> +54 9 3465 41-9749</li>
+                    <li><i class="far fa-envelope mr-2"></i> soporte@motoya.com</li>
+                    <li><i class="fas fa-map-marker-alt mr-2"></i> Rosario, Argentina</li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-gray-900 text-center text-xs">
+            &copy; 2025 MOTOYA. Todos los derechos reservados. No es un juego de azar. Sin obligación de compra.
+        </div>
+    </footer>
+
+    <!-- MODAL DE COMPRA (DATOS + ANTI-BOT) -->
+    <div id="modal-compra" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+        <div class="bg-slate-900 border border-brand-blue/50 rounded-2xl w-full max-w-md shadow-2xl relative">
+            <button onclick="cerrarModalCompra()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            
+            <div class="p-8">
+                <h3 class="text-2xl font-bold text-white mb-2">Tus Datos</h3>
+                <p class="text-gray-400 text-sm mb-6">Completá el formulario para asignarte los números luego del pago.</p>
+                
+                <form id="form-compra" onsubmit="procesarCompra(event)">
+                    <!-- Campo trampa para bots (Honeypot) -->
+                    <input type="text" id="campo_trampa" class="hp-field" autocomplete="off" tabindex="-1">
+
+                    <div class="space-y-4">
+                        <input type="text" id="nombre" placeholder="Nombre Completo" required class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-brand-blue outline-none">
+                        <input type="number" id="dni" placeholder="DNI (Sin puntos)" required class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-brand-blue outline-none">
+                        <input type="email" id="email" placeholder="Correo Electrónico" required class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-brand-blue outline-none">
+                        <input type="tel" id="telefono" placeholder="WhatsApp / Teléfono" required class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-brand-blue outline-none">
+                    </div>
+                    
+                    <button type="submit" id="btn-pagar" class="w-full mt-8 py-4 rounded-xl gold-gradient text-white font-bold shadow-lg hover:scale-[1.02] transition">
+                        IR A PAGAR AHORA <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </form>
+                <p id="mensaje-error" class="text-red-400 text-xs mt-4 hidden text-center"></p>
+                <p id="mensaje-info" class="text-brand-blue text-xs mt-4 hidden text-center animate-pulse"><i class="fas fa-shield-alt"></i> Generando link de pago seguro...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL BASES Y CONDICIONES -->
+    <div id="modal-bases" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-slate-900 border border-white/10 rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col shadow-2xl">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white">Bases y Condiciones</h3>
+                <button onclick="toggleModal('modal-bases')" class="text-gray-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto modal-scroll text-gray-300 text-sm leading-relaxed">
+                <p class="mb-4"><strong>1. ORGANIZADOR:</strong> La presente promoción comercial denominada "TU MOTO 0KM" es organizada por MOTOYA, en adelante el "ORGANIZADOR".</p>
+                <p class="mb-4"><strong>2. VIGENCIA:</strong> La promoción tendrá vigencia en todo el territorio de la República Argentina, desde el día 01/12/2025 hasta el 30/12/2025.</p>
+                <p class="mb-4"><strong>3. MECÁNICA DE PARTICIPACIÓN:</strong> La participación se concreta mediante la adquisición de productos digitales en nuestra plataforma. Con cada compra se asignan chances gratuitas para el sorteo.</p>
+                <p class="mb-4"><strong>4. DEL SORTEO:</strong> El ganador será determinado en base a los cuatro (4) dígitos del Primer Premio del sorteo de la Lotería Nacional (Nocturna) del segundo sábado del mes posterior a la compra de su revista.</p>
+                <p class="mb-4"><strong>5. PREMIOS:</strong> El premio consiste en una Moto 110cc 0km (pudiendo variar la marca y modelo por disponibilidad de proveedores o decisión de MOTOYA) patentamiento, formularios e impuestos. El premio NO incluye gastos de flete, los cuales corren por exclusiva cuenta del GANADOR.</p>
+                <p class="mb-4"><strong>6. CLÁUSULA SIN OBLIGACIÓN DE COMPRA:</strong> Cualquier persona podrá solicitar una chance gratuita enviando un dibujo a mano alzada del logo de la empresa y contarnos como nos conocieron a la dirección postal del Organizador, adjuntando DNI, DOMICILIO y TELEFONO.</p>
+            </div>
+            <div class="p-4 border-t border-white/10 bg-black/20 text-right">
+                <button onclick="toggleModal('modal-bases')" class="px-6 py-2 bg-brand-blue text-white rounded-lg font-bold hover:bg-blue-600 transition">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POLITICA DE PRIVACIDAD -->
+    <div id="modal-privacidad" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-slate-900 border border-white/10 rounded-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col shadow-2xl">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white">Política de Privacidad</h3>
+                <button onclick="toggleModal('modal-privacidad')" class="text-gray-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto modal-scroll text-gray-300 text-sm leading-relaxed">
+                <p class="mb-4">En cumplimiento de la Ley 25.326 de Protección de Datos Personales, le informamos que los datos recabados serán tratados con el único fin de gestionar su participación.</p>
+                <p class="mb-4"><strong>1. DATOS RECOLECTADOS:</strong> Nombre, DNI, Email y Teléfono. Estos datos son necesarios para validar su identidad en caso de resultar ganador.</p>
+                <p class="mb-4"><strong>2. USO DE DATOS:</strong> No vendemos ni compartimos sus datos con terceros, excepto cuando sea necesario para procesar pagos (Mercado Pago) o entregar premios.</p>
+                <p class="mb-4"><strong>3. DERECHOS:</strong> Usted tiene derecho a acceder, rectificar o suprimir sus datos de nuestra base comunicándose a soporte@motoya.com.</p>
+            </div>
+            <div class="p-4 border-t border-white/10 bg-black/20 text-right">
+                <button onclick="toggleModal('modal-privacidad')" class="px-6 py-2 bg-brand-blue text-white rounded-lg font-bold hover:bg-blue-600 transition">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE REALTIME DATABASE SDK & AUTH -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, push, set, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions.js";
+
+        // TUS DATOS DE FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyDif6k9WYqbWAzOLqiY3k9zTnDCCbGB48o",
+            authDomain: "motoya-e186d.firebaseapp.com",
+            projectId: "motoya-e186d",
+            storageBucket: "motoya-e186d.appspot.com",
+            messagingSenderId: "887638737224",
+            appId: "1:887638737224:web:eb4f677abc02ce52ac337d" 
+        };
+
+        // INICIALIZACIÓN
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const functions = getFunctions(app); // Funciones de Nube
+        signInAnonymously(auth).catch(console.error);
+
+        // Variables de estado
+        let packActual = { id: '', chances: 0, precio: 0, titulo: '' };
+
+        // Abrir Modal con datos del pack (CORREGIDO: Recibe precio y título)
+        window.abrirModalCompra = (id, chances, precio, titulo) => {
+            packActual = { id, chances, precio, titulo };
+            document.getElementById('modal-compra').classList.remove('hidden');
+        };
+
+        window.cerrarModalCompra = () => document.getElementById('modal-compra').classList.add('hidden');
+
+        // Modales Legales
+        window.toggleModal = (id) => {
+            const m = document.getElementById(id);
+            m.classList.toggle('hidden');
+            document.body.style.overflow = m.classList.contains('hidden') ? 'auto' : 'hidden';
+        };
+        
+        window.onclick = function(e) {
+            if(e.target.id == 'modal-bases' || e.target.id == 'modal-privacidad') window.toggleModal(e.target.id);
+        };
+
+        // Generar Números (Lógica cliente temporal, idealmente también iría al backend)
+        async function generarNumerosSeguros(cantidad) {
+            const numerosGenerados = [];
+            const clientesRef = ref(db, 'clientes');
+            const snapshot = await get(clientesRef);
+            const numerosOcupados = new Set();
+            if (snapshot.exists()) {
+                snapshot.forEach(child => {
+                    const data = child.val();
+                    if (data.numeros_asignados) data.numeros_asignados.forEach(n => numerosOcupados.add(n));
+                });
+            }
+            for (let i = 0; i < cantidad; i++) {
+                let numeroValido = false;
+                let intentos = 0;
+                let numStr = '';
+                while (!numeroValido && intentos < 100) {
+                    let num = Math.floor(Math.random() * 10000);
+                    numStr = num.toString().padStart(4, '0');
+                    if (!numerosOcupados.has(numStr) && !numerosGenerados.includes(numStr)) {
+                        numeroValido = true;
+                        numerosOcupados.add(numStr);
+                    }
+                    intentos++;
+                }
+                if (numeroValido) numerosGenerados.push(numStr);
+            }
+            return numerosGenerados;
+        }
+
+        // PROCESO DE COMPRA V2 (Con Link Dinámico)
+        window.procesarCompra = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-pagar');
+            const msgInfo = document.getElementById('mensaje-info');
+            const originalText = btn.innerHTML;
+            
+            // Anti-bot básico
+            if (document.getElementById('campo_trampa').value !== "") return;
+
+            // Esperar autenticación si no está lista
+            if (!auth.currentUser) {
+                alert("Conectando con el servidor... Intenta de nuevo en unos segundos.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESANDO...';
+            msgInfo.classList.remove('hidden');
+
+            try {
+                // 1. Generar Números y Datos
+                const nuevosNumeros = await generarNumerosSeguros(packActual.chances);
+                const userId = auth.currentUser.uid;
+                
+                const datosCliente = {
+                    nombre: document.getElementById('nombre').value,
+                    dni: document.getElementById('dni').value,
+                    email: document.getElementById('email').value,
+                    telefono: document.getElementById('telefono').value,
+                    pack: packActual.id,
+                    fecha: new Date().toISOString(),
+                    estado_pago: 'pendiente',
+                    numeros_asignados: nuevosNumeros,
+                    uid_creador: userId
+                };
+
+                // 2. Guardar en Base de Datos (Obtenemos la KEY/ID)
+                const newClienteRef = push(ref(db, 'clientes'));
+                await set(newClienteRef, datosCliente);
+                const clienteId = newClienteRef.key; // ESTE ES EL ID CLAVE
+
+                // 3. LLAMAR AL BACKEND PARA GENERAR LINK DE PAGO
+                // Le pasamos el ID de Firebase para que lo vincule
+                msgInfo.innerHTML = '<i class="fas fa-lock"></i> Generando preferencia de pago...';
+                
+                const crearPreferencia = httpsCallable(functions, 'crearPreferencia');
+                const respuesta = await crearPreferencia({
+                    title: packActual.titulo,
+                    price: packActual.precio,
+                    id_cliente: clienteId // Enviamos el ID para el webhook
+                });
+
+                // 4. Redirigir al link que nos dio el Backend
+                if (respuesta.data && respuesta.data.init_point) {
+                    window.location.href = respuesta.data.init_point;
+                } else {
+                    console.error("Respuesta backend:", respuesta);
+                    throw new Error("No se recibió link de pago. Respuesta inválida.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                // Mostrar error detallado en pantalla
+                const errorMsg = error.message || JSON.stringify(error);
+                document.getElementById('mensaje-error').innerText = "Error: " + errorMsg;
+                document.getElementById('mensaje-error').classList.remove('hidden');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                msgInfo.classList.add('hidden');
+            }
+        };
+        
+        // BUSCADOR DE CHANCES
+        window.buscarChances = async () => {
+            const dni = document.getElementById('dniInput').value.trim();
+            const res = document.getElementById('resultadoChances');
+            
+            if(!dni || dni.length < 6) return alert("Ingresá un DNI válido");
+
+            res.classList.remove('hidden');
+            res.innerHTML = '<div class="text-brand-blue animate-pulse">Buscando...</div>';
+
+            try {
+                if(!db) throw new Error("DB no configurada");
+
+                const clientesRef = ref(db, 'clientes');
+                const q = query(clientesRef, orderByChild('dni'), equalTo(dni));
+                
+                const snapshot = await get(q);
+
+                if (snapshot.exists()) {
+                    let numerosEncontrados = [];
+                    let hayPendientes = false;
+
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        // Verificamos si está aprobado o pagado (ignorando mayúsculas/minúsculas)
+                        const estaAprobado = data.estado_pago && (data.estado_pago.toLowerCase() === 'aprobado' || data.estado_pago.toLowerCase() === 'pagado');
+
+                        if(estaAprobado && data.numeros_asignados) {
+                            numerosEncontrados = [...numerosEncontrados, ...data.numeros_asignados];
+                        } else if (!estaAprobado) {
+                            hayPendientes = true;
+                        }
+                    });
+
+                    // LÓGICA DE VISUALIZACIÓN
+                    if (numerosEncontrados.length > 0) {
+                        res.innerHTML = `
+                            <div class="p-6 bg-green-500/10 border border-green-500/30 rounded-xl">
+                                <div class="text-green-400 font-bold mb-2"><i class="fas fa-check-circle"></i> ¡ENCONTRADO!</div>
+                                <p class="text-sm text-gray-300 mb-2">Tus números asignados:</p>
+                                <div class="bg-black/40 p-4 rounded text-2xl font-mono tracking-widest text-white border border-white/10">
+                                    ${numerosEncontrados.join(' - ')}
+                                </div>
+                                <p class="text-xs text-yellow-500 mt-2 italic">* ¡Mucha suerte!</p>
+                            </div>`;
+                    } else if (hayPendientes) {
+                        res.innerHTML = `
+                            <div class="p-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                                <div class="text-yellow-400 font-bold mb-2"><i class="fas fa-clock"></i> PAGO EN PROCESO</div>
+                                <p class="text-sm text-gray-300">Tu compra está registrada, pero estamos verificando el pago.</p>
+                                <p class="text-xs text-gray-500 mt-2">Tus números aparecerán aquí automáticamente en cuanto se apruebe (máx 24hs).</p>
+                            </div>`;
+                    } else {
+                        res.innerHTML = `
+                            <div class="p-6 bg-red-500/10 border border-red-500/30 rounded-xl">
+                                <div class="text-red-400 font-bold"><i class="fas fa-times-circle"></i> SIN NÚMEROS ACTIVOS</div>
+                                <div class="text-sm text-gray-400 mt-2">No encontramos números activos para este DNI.</div>
+                            </div>`;
+                    }
+
+                } else {
+                    res.innerHTML = `
+                        <div class="p-6 bg-red-500/10 border border-red-500/30 rounded-xl">
+                            <div class="text-red-400 font-bold"><i class="fas fa-times-circle"></i> NO ENCONTRADO</div>
+                            <div class="text-sm text-gray-400 mt-2">No hay registros con el DNI ${dni}.</div>
+                        </div>`;
+                }
+
+            } catch (error) {
+                console.error(error);
+                res.innerHTML = `<div class="text-red-400 text-xs">Error de conexión.</div>`;
+            }
+        };
+
+        const targetDate = new Date("Jan 10, 2026 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const d = targetDate - now;
+            if (d < 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+            document.getElementById("days").innerText = Math.floor(d / (1000 * 60 * 60 * 24)).toString().padStart(2,0);
+            document.getElementById("hours").innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2,0);
+            document.getElementById("minutes").innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2,0);
+            document.getElementById("seconds").innerText = Math.floor((d % (1000 * 60)) / 1000).toString().padStart(2,0);
+        }, 1000);
+
+    </script>
+</body>
+</html>
