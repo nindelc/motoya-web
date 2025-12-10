@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Pago | MOTO-YA <i class="fas fa-bolt text-yellow-400"></i></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Gradiente animado sutil para fondos */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        /* Efecto glassmorphism para las tarjetas */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Elementos decorativos de fondo -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob"></div>
+        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Contenedor Principal -->
+    <main id="main-container" class="w-full max-w-lg mx-auto">
+        
+        <!-- Logo -->
+        <div class="text-center mb-8 fade-in">
+            <!-- Se agregó flex, items-center y el icono del rayo -->
+            <h1 class="text-3xl font-extrabold tracking-tighter italic flex items-center justify-center gap-2">
+                MOTO<span class="text-blue-500">YA</span>.AR <i class="fas fa-bolt text-yellow-400"></i>
+            </h1>
+        </div>
+
+        <!-- TARJETA DE ESTADO (Dinámica) -->
+        <div id="status-card" class="glass-card rounded-2xl p-8 shadow-2xl text-center fade-in border-t-4 transition-all duration-500">
+            
+            <!-- Icono Dinámico -->
+            <div class="mb-6 flex justify-center">
+                <div id="status-icon-container" class="w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-lg transition-colors duration-500">
+                    <i id="status-icon" class="fas fa-spinner fa-spin"></i>
+                </div>
+            </div>
+
+            <!-- Título -->
+            <h2 id="status-title" class="text-2xl font-bold mb-4">Cargando estado...</h2>
+
+            <!-- Mensaje -->
+            <p id="status-message" class="text-slate-300 mb-8 leading-relaxed">
+                Estamos verificando la información de tu pago. Por favor aguarda un momento.
+            </p>
+
+            <!-- Acciones / Botones -->
+            <div id="action-buttons" class="space-y-3">
+                <!-- Se llenará con JS -->
+            </div>
+
+            <!-- ID de transacción (Opcional, visible solo si existe) -->
+            <div id="transaction-id" class="mt-6 pt-6 border-t border-slate-700 text-xs text-slate-500 hidden">
+                ID de Transacción: <span id="payment-id-display">...</span>
+            </div>
+
+        </div>
+
+        <!-- Footer simple -->
+        <footer class="mt-12 text-center text-slate-500 text-sm fade-in">
+            <p>&copy; 2025 Motoya.ar - Todos los derechos reservados.</p>
+        </footer>
+
+    </main>
+
+    <!-- 
+      PANEL DE CONTROL DE DESARROLLO 
+    -->
+    <div class="fixed bottom-4 right-4 bg-slate-800 p-2 rounded-lg border border-slate-700 shadow-xl opacity-50 hover:opacity-100 transition-opacity z-50">
+        <p class="text-xs text-slate-400 mb-2 text-center font-bold">SIMULADOR (DEV)</p>
+        <div class="flex gap-2">
+            <button onclick="renderSuccess()" class="w-8 h-8 bg-green-500 rounded hover:bg-green-600 text-white text-xs" title="Simular Éxito"><i class="fas fa-check"></i></button>
+            <button onclick="renderPending()" class="w-8 h-8 bg-yellow-500 rounded hover:bg-yellow-600 text-black text-xs" title="Simular Pendiente"><i class="fas fa-clock"></i></button>
+            <button onclick="renderFailure()" class="w-8 h-8 bg-red-500 rounded hover:bg-red-600 text-white text-xs" title="Simular Fallo"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // --- LÓGICA DE DETECCIÓN Y RENDERIZADO ---
+
+        // Elementos del DOM
+        const card = document.getElementById('status-card');
+        const iconContainer = document.getElementById('status-icon-container');
+        const icon = document.getElementById('status-icon');
+        const title = document.getElementById('status-title');
+        const message = document.getElementById('status-message');
+        const buttonsContainer = document.getElementById('action-buttons');
+        const transactionContainer = document.getElementById('transaction-id');
+        const paymentIdDisplay = document.getElementById('payment-id-display');
+
+        // Número de WhatsApp para soporte
+        const WHATSAPP_NUMBER = "5493465419749"; 
+
+        // Función Principal al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('collection_status') || urlParams.get('status');
+            const paymentId = urlParams.get('payment_id') || urlParams.get('id');
+
+            if (paymentId) {
+                transactionContainer.classList.remove('hidden');
+                paymentIdDisplay.textContent = paymentId;
+            }
+
+            if (status === 'approved' || status === 'success') {
+                renderSuccess();
+            } else if (status === 'in_process' || status === 'pending') {
+                renderPending();
+            } else if (status === 'rejected' || status === 'failure' || status === 'null') {
+                renderFailure();
+            } else {
+                // Estado por defecto o manejo de errores de ruta
+            }
+        });
+
+        // --- RENDERIZADO DE ESTADOS ---
+
+        function renderSuccess() {
+            // Estilos
+            card.className = "glass-card rounded-2xl p-8 shadow-2xl text-center fade-in border-t-4 border-green-500 transition-all duration-500";
+            iconContainer.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-lg transition-colors duration-500 bg-green-500/20 text-green-400 mx-auto";
+            
+            // Contenido
+            icon.className = "fas fa-check-circle";
+            title.textContent = "¡Pago Exitoso!";
+            title.className = "text-2xl font-bold mb-4 text-green-400";
+            // Aclaración explícita de eRevista
+            message.innerHTML = `Gracias por tu compra. Ya estamos procesando tu pedido.<br><br>
+            <span class="text-white font-semibold">Revisa tu Email y WhatsApp.</span><br>
+            En breves recibirás tus números para el sorteo y <span class="text-blue-400 font-bold">el acceso a tu eRevista digital</span>.`;
+
+            // Botones
+            buttonsContainer.innerHTML = `
+                <a href="/" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-home mr-2"></i> Volver al Inicio
+                </a>
+                <a href="https://wa.me/${+5493465419749}?text=Hola!%20Acabo%20de%20comprar%20y%20quiero%20confirmar%20mi%20participaci%C3%B3n." target="_blank" class="block w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-6 rounded-lg transition mt-3">
+                    <i class="fab fa-whatsapp mr-2 text-green-400"></i> Contactar Soporte
+                </a>
+            `;
+        }
+
+        function renderFailure() {
+            // Estilos
+            card.className = "glass-card rounded-2xl p-8 shadow-2xl text-center fade-in border-t-4 border-red-500 transition-all duration-500";
+            iconContainer.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-lg transition-colors duration-500 bg-red-500/20 text-red-400 mx-auto";
+            
+            // Contenido
+            icon.className = "fas fa-times-circle";
+            title.textContent = "Hubo un problema";
+            title.className = "text-2xl font-bold mb-4 text-red-400";
+            // Invitación a reintentar para no perder la eRevista
+            message.innerHTML = `No pudimos procesar tu pago. Puede deberse a fondos insuficientes o un error del banco.<br>
+            No te preocupes, no se te ha cobrado nada.<br><br>
+            <span class="text-white text-sm">Intenta nuevamente para asegurar tus números y <strong class="text-blue-400">tu eRevista</strong>.</span>`;
+
+            const waMessage = encodeURIComponent("Hola Motoya, tuve un problema al intentar realizar el pago. ¿Me podrían ayudar?");
+
+            // Botones
+            buttonsContainer.innerHTML = `
+                <a href="/" class="block w-full bg-white text-slate-900 hover:bg-gray-200 font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-redo mr-2"></i> Reintentar Pago
+                </a>
+                <a href="https://wa.me/${+5493465419749}?text=${waMessage}" target="_blank" class="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-lg shadow-green-900/50 mt-4">
+                    <i class="fab fa-whatsapp mr-2"></i> Ayuda por WhatsApp
+                </a>
+                <a href="mailto:soporte@motoya.ar" class="block mt-4 text-sm text-slate-400 hover:text-white transition">
+                    O envíanos un email a soporte@motoya.ar
+                </a>
+            `;
+        }
+
+        function renderPending() {
+            // Estilos
+            card.className = "glass-card rounded-2xl p-8 shadow-2xl text-center fade-in border-t-4 border-yellow-500 transition-all duration-500";
+            iconContainer.className = "w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-lg transition-colors duration-500 bg-yellow-500/20 text-yellow-400 mx-auto";
+            
+            // Contenido
+            icon.className = "fas fa-clock";
+            title.textContent = "Pago Pendiente";
+            title.className = "text-2xl font-bold mb-4 text-yellow-400";
+            // Se agrega mención a la eRevista
+            message.innerHTML = `Tu pago se está procesando (comúnmente ocurre con pagos en efectivo o redes lentas).<br><br>
+            Te avisaremos por email en cuanto se acredite para enviarte <span class="text-yellow-400 font-bold">tus números y el acceso a la eRevista</span>.`;
+
+            // Botones
+            buttonsContainer.innerHTML = `
+                <a href="/" class="block w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-store mr-2"></i> Volver a la Tienda
+                </a>
+                 <div class="mt-4 text-xs text-slate-500">
+                    Si pagaste con efectivo en Rapipago/PagoFácil, puede tardar hasta 48hs.
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
