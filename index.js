@@ -10,6 +10,7 @@ app.use(cors());
 
 // 1. ARCHIVOS ESTÁTICOS (Tu Frontend)
 // El servidor busca la carpeta 'www' y muestra el index.html automáticamente
+// IMPORTANTE: Asegúrate de guardar 'payment_status.html' dentro de esta carpeta 'www'
 app.use(express.static(path.join(__dirname, "www")));
 
 // 2. CONFIGURACIÓN MERCADO PAGO SEGURA
@@ -41,12 +42,15 @@ app.post("/create_preference", async (req, res) => {
                     currency_id: "ARS", 
                 },
             ],
+            // --- CAMBIO AQUÍ: Redirigimos todo al archivo payment_status.html ---
             back_urls: {
-                success: `${baseURL}/success`,
-                failure: `${baseURL}/failure`,
-                pending: `${baseURL}/pending`,
+                success: `${baseURL}/payment_status.html`,
+                failure: `${baseURL}/payment_status.html`,
+                pending: `${baseURL}/payment_status.html`,
             },
             auto_return: "approved",
+            // --------------------------------------------------------------------
+            
             // IMPORTANTE: En Render deberás configurar MP_WEBHOOK_URL si quieres usar una externa,
             // o usar la autodetectada. Por defecto apuntamos a la ruta interna.
             notification_url: "https://motoya.ar/webhook", 
